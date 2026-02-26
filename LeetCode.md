@@ -72,4 +72,37 @@ if (it != mp.end()) {
 }
 ```
 
-//hi
+## 2. Contains Duplicate
+
+### 给你一个整数数组 `nums` 。如果任一值在数组中出现 **至少两次** ，返回 `true` ；如果数组中每个元素互不相同，返回 `false` 。
+
+### 思路1 ： 哈希表
+
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_map <int,int> mp;
+        for (int i = 0 ; i < nums.size() ; i++){
+            if (mp.find(nums[i]) != mp.end())return true;
+            mp[nums[i]] = i;
+        }
+        return false;
+    }
+};
+```
+
+### 思路2 ：排序
+
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        sort (nums.begin() , nums.end());
+        for (int i = 0 ; i < nums.size()-1 ; i++) if(nums[i] == nums[i+1]) return true;
+        return false;
+    }
+};
+```
+
+**有时候理论复杂度更优的哈希表，在实际运行中不一定比排序快，因为有内存分配的开销。**

@@ -109,6 +109,22 @@ public:
 
 ## 49.**Group Anagrams**
 
+### 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+
+**示例 1:**
+
+**输入:** strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+
+**输出:** [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+**解释：**
+
+- 在 strs 中没有字符串可以通过重新排列来形成 `"bat"`。
+- 字符串 `"nat"` 和 `"tan"` 是字母异位词，因为它们可以重新排列以形成彼此。
+- 字符串 `"ate"` ，`"eat"` 和 `"tea"` 是字母异位词，因为它们可以重新排列以形成彼此。
+
+### 思路1 ： 将每个字符串都内部排序，异位的会成为相同的
+
 ```cpp
 class Solution {
 public:
@@ -128,9 +144,46 @@ public:
 };
 ```
 
-**try to be familiar with functions of map & vector**
+### 思路2 ： 比如 "aab" 记为：a:2, b:1, 其他:0。 把这个计数特征转成字符串或者自定义结构作为 Key
 
-**traverse vector ：**
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> mp;
+        
+        for (const string& s : strs) {
+            // 1. Create a frequency array for 26 lowercase letters
+            int count[26] = {0}; // Fixed size
+            for (char c : s) {
+                count[c - 'a']++; // Map 'a'->0, 'b'->1, etc.
+            }
+            
+            // 2. Convert the frequency array to a string key
+            // For example: "1#0#1#..." represents 1 'a', 0 'b', 1 'c'...
+            string key = "";
+            for (int i = 0; i < 26; i++) {
+                key += "#"; // Delimiter to separate counts
+                key += string(count[i]);
+            }
+            //diffenetiate 1#11 & 11#1
+            // 3. Group by this unique "fingerprint"
+            mp[key].push_back(s);
+        }
+        
+        // 4. Collect results (Traversal)
+        vector<vector<string>> res;
+        for (auto& [key, value] : mp) {
+            res.push_back(value);
+        }
+        return res;
+    }
+};
+```
+
+## map & vector
+
+### traverse vector ：
 
 ```cpp
 vector <int> nums = {1,2,3};
@@ -151,7 +204,7 @@ for (auto it = nums.begin() ; it != nums.end(); it++){
 }
 ```
 
-**traverse map**
+### traverse map :
 
 ```cpp
 unordered_map <string,int> mp = {{"apple",1}, {"banana",2}};
@@ -185,8 +238,6 @@ for (auto it = mp.begin() ; it != mp.end() ; it++){
 **vector的push_back 是直接加到最后，insert是插入在中间**
 
 **map.insert({a,b})（map都是一对一对的形式）**
-
-
 
 **Vector vs. Array: The Evolution of Contiguous Storage.**
 

@@ -72,7 +72,7 @@ if (it != mp.end()) {
 }
 ```
 
-## 2. Contains Duplicate
+## 217. Contains Duplicate
 
 ### 给你一个整数数组 `nums` 。如果任一值在数组中出现 **至少两次** ，返回 `true` ；如果数组中每个元素互不相同，返回 `false` 。
 
@@ -106,3 +106,102 @@ public:
 ```
 
 **有时候理论复杂度更优的哈希表，在实际运行中不一定比排序快，因为有内存分配的开销。**
+
+## 49.**Group Anagrams**
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map <string , vector <string> > mp;
+        for (string s : strs){
+            string t = s;
+            sort(t.begin() , t.end());
+            mp[t].push_back(s);
+        }
+        vector <vector <string> > ans;
+        for (auto it = mp.begin() ; it != mp.end() ; it++){
+            ans.push_back(it -> second);
+        }
+        return ans;
+    }
+};
+```
+
+**try to be familiar with functions of map & vector**
+
+**traverse vector ：**
+
+```cpp
+vector <int> nums = {1,2,3};
+for (int x : nums){
+    cout << x << " ";//directly reach the items in vector
+}
+```
+
+```cpp
+for (int i = 0 ; i < nums.size() ; i++){
+    cout << nums[i] << " "; 
+}
+```
+
+```cpp
+for (auto it = nums.begin() ; it != nums.end(); it++){
+    cout << *it << " "; // it functions as a pointer（实际上是迭代器）
+}
+```
+
+**traverse map**
+
+```cpp
+unordered_map <string,int> mp = {{"apple",1}, {"banana",2}};
+for (auto& [key, value] : mp) {
+    cout << key << " 有 " << value << " 个" << endl;
+}
+//unordered_map会先输出banana后输出Apple他是按照哈希表的计算方式，map就会按照储存的顺序，先输出apple后输出banana
+```
+
+```cpp
+for (auto &p : mp){
+    cout << p.first << ":" << p.second;
+}
+/*为什么用 auto& 而不是 auto？
+
+auto：会把容器里的东西复制一份，如果单词很多，复制会很慢。
+
+auto&：是引用，直接指向原来的位置，不产生复制，速度极快。*/
+```
+
+```cpp
+for (auto it = mp.begin() ; it != mp.end() ; it++){
+    cout << it->first << ":" << it->second;
+}
+```
+
+**push_back : vector 有，map没有**
+
+**insert : 两者都有**
+
+**vector的push_back 是直接加到最后，insert是插入在中间**
+
+**map.insert({a,b})（map都是一对一对的形式）**
+
+
+
+**Vector vs. Array: The Evolution of Contiguous Storage.**
+
+相同点 (The Similarities)
+
+- **连续内存 (Contiguous Memory)**：
+  
+  - 两者在内存中都是紧挨着排列的。
+  
+  - 这意为着它们都支持 **随机访问 (Random Access)**，你用 `nums[i]` 访问元素的速度都是 O(1)。
+
+- **底层结构**：`vector` 的底层其实就是一个普通的 **C-style Array**。
+
+不同点（differences）
+
+    the size of array is fixed while the size of vector is dynamic (vector.push_back()) 
+
+    vector.size()  vector.capacity()  valiable while array don't
